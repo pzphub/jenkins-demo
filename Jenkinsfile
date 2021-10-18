@@ -7,6 +7,7 @@ node('haimaxy-jnlp') {
             if (env.BRANCH_NAME != 'master') {
                 build_tag = "${env.BRANCH_NAME}-${build_tag}"
             }
+        echo "${env.BRANCH_NAME}"
         }
     }
     stage('Test') {
@@ -28,8 +29,8 @@ node('haimaxy-jnlp') {
         if (env.BRANCH_NAME == 'master') {
             input "确认要部署线上环境吗？"
         }
-        sh "echo ${build_tag}"
-        sh "echo ${env.BRANCH_NAME}"
+        echo ${build_tag}
+        echo ${env.BRANCH_NAME}
         sh "sed -i 's/<BUILD_TAG>/${build_tag}/' k8s.yaml"
         sh "sed -i 's/<BRANCH_NAME>/${env.BRANCH_NAME}/' k8s.yaml"
         sh "kubectl apply -f k8s.yaml --record"
